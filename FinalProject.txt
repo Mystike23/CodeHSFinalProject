@@ -1,0 +1,254 @@
+var karelX=100;
+var karelY=300;
+setSize(450,450);
+var background=new WebImage("https://codehs.com/uploads/30be462a62858fc9a3cd072f1e197aea");
+add(background);
+var c;
+c=new Circle(10);
+c.setPosition(getWidth()/2,45);
+c.setColor("limeGreen");
+add(c);
+
+var score=0;
+
+var projectile;
+projectile=new Rectangle(30,8);
+    projectile.setColor("blue");
+    projectile.setPosition(getWidth()-12,getHeight()/2-3);
+    add(projectile);
+
+var gameover=false;
+
+
+var karel=new WebImage("https://codehs.com/uploads/41da8c190f15f1214949b590a121c0cf");
+karel.setPosition(karelX, karelY);
+karel.setSize(100, 100);
+var x,y;
+
+var karel2X=getWidth()-90;
+var karel2Y=getHeight()/2-60;
+
+var karel2=new WebImage("https://codehs.com/uploads/41da8c190f15f1214949b590a121c0cf");
+karel2.setPosition(karel2X, karel2Y);
+karel2.setSize(100, 100);
+var kCounter=0;
+
+var scoreBoard;
+
+var karel3X=Randomizer.nextInt(0,350);
+var karel3Y=0;
+var k3speed=5;
+
+
+var karel3=new WebImage("https://codehs.com/uploads/41da8c190f15f1214949b590a121c0cf");
+//var karel3 = new Rectangle(25,75);
+karel3.setPosition(karel3X, karel3Y);
+karel3.setSize(100, 100);
+var oppo=0;
+
+
+add(karel);
+function start(){
+    scoreBoard=new Text("Score: "+score);
+    scoreBoard.setPosition(0,25);
+    scoreBoard.setColor("red");
+    add(scoreBoard);
+    setTimer(scoring,1000);
+    setTimer(moveK, 50);
+    keyDownMethod(eventHandler);
+    setTimer(spawnKarel,1000);
+    setTimer(weapon,30);
+}
+function moveK(){ 
+    if(karelX+50<=c.x){
+        //karel.setWebImage("https://codehs.com/uploads/41da8c190f15f1214949b590a121c0cf");
+        karel.setPosition(karelX,karelY);
+        karel.setSize(100,100);
+    }
+    if(karelX+50>c.x){
+        //karel.setWebImage("https://codehs.com/uploads/2a8cac4a3c7f8387487c9f843d70a145");
+        karel.setPosition(karelX,karelY);
+        karel.setSize(100,100);
+    }
+ 
+    if(karelX+50<=c.x){
+        
+        karelX+=4;
+        karel.setPosition(karelX, karelY);
+    }
+    if(karelX+50>c.x){
+        
+        karelX-=4;
+        karel.setPosition(karelX, karelY);
+    }
+    if(karelY+50<=c.y){
+        karelY+=4;
+        karel.setPosition(karelX, karelY);
+    }
+    if(karelY+50>=c.y){
+        karelY-=4;
+        karel.setPosition(karelX, karelY);
+    }
+    
+    if(kCounter>=5){
+        if(oppo==1){
+            karel3Y-=5;
+            karel3.setPosition(karel3X,karel3Y);
+        }
+        if(oppo==0){
+            karel3Y+=5;
+            karel3.setPosition(karel3X,karel3Y);
+        }
+        if(karel3Y>=350){
+            oppo=1;
+        }
+        if(karel3Y<=0){
+            oppo=0;
+        }
+        
+        
+        
+    }
+    
+    if(kCounter>10){
+    if(karel2X+50<=c.x){
+        //karel2=new WebImage("https://codehs.com/uploads/41da8c190f15f1214949b590a121c0cf");
+        karel2X+=5;
+        karel2.setPosition(karel2X, karel2Y);
+    }
+    if(karel2X+50>c.x){
+        //karel2=new WebImage("https://codehs.com/uploads/41da8c190f15f1214949b590a121c0cf");
+        karel2X-=5;
+        karel2.setPosition(karel2X, karel2Y);
+    }
+    if(karel2Y+50<=c.y){
+        karel2Y+=5;
+        karel2.setPosition(karel2X, karel2Y);
+    }
+    if(karel2Y+50>=c.y){
+        karel2Y-=5;
+        karel2.setPosition(karel2X, karel2Y);
+    }
+    }
+    //karel collision
+    if( karelX<c.x+5 &&
+        karelX+100>c.x&&
+        karelY<c.y&&
+        karelY+100>c.y){
+        var txt=new Text("GAME OVER!!!","30pt Arial");
+        txt.setPosition(90,getHeight()/2);
+        txt.setColor("red");
+        add(txt);
+        stopTimer(moveK);
+        stopTimer(spawnKarel);
+        stopTimer(scoring);
+        stopTimer(weapon);
+        gameover=true;
+    }
+    //obstacle collision
+    if( projectile.x<=c.x+5 &&
+        projectile.x+30>=c.x-5&&
+        projectile.y<=c.y+5&&
+        projectile.y+8>=c.y-5){
+        var txt=new Text("GAME OVER!!!","30pt Arial");
+        txt.setPosition(90,getHeight()/2);
+        txt.setColor("red");
+        add(txt);
+        stopTimer(moveK);
+        stopTimer(spawnKarel);
+        stopTimer(scoring);
+        stopTimer(weapon);
+        gameover=true;
+    }
+    //karel2 collision
+    if(kCounter>=10){
+    if( karel2X<c.x+5 &&
+        karel2X+100>c.x&&
+        karel2Y<c.y&&
+        karel2Y+100>c.y){
+        var txt=new Text("GAME OVER!!!","30pt Arial");
+        txt.setPosition(90,getHeight()/2);
+        txt.setColor("red");
+        add(txt);
+        stopTimer(moveK);
+        stopTimer(spawnKarel);
+        stopTimer(scoring);
+        stopTimer(weapon);
+        gameover=true;
+    }
+    }
+    //karel3 collision
+    if(kCounter>=5){
+    if( karel3X<=c.x+5 &&
+        karel3X+100>=c.x-5&&
+        karel3Y<=c.y+5&&
+        karel3Y+100>=c.y-5){
+        var txt=new Text("GAME OVER!!!","30pt Arial");
+        txt.setPosition(90,getHeight()/2);
+        txt.setColor("red");
+        add(txt);
+        stopTimer(moveK);
+        stopTimer(spawnKarel);
+        stopTimer(scoring);
+        stopTimer(weapon);
+        gameover=true;
+    }
+    }
+}
+function spawnKarel(){
+    kCounter++;
+    if(kCounter==10){
+        add(karel2);
+    }
+    if(kCounter==5){
+        add(karel3);
+    }
+}
+function scoring(){
+    score+=5;
+    scoreBoard.setText("Score: "+score);
+}
+    
+function weapon(){
+    if(projectile.x<0){
+        projectile.setPosition(getWidth(),getHeight()/2);
+    }
+    projectile.move(Randomizer.nextInt(-7,-10),0);
+}
+
+
+ 
+ 
+function eventHandler(e){
+    /*x=e.getX();
+    y=e.getY();
+    if(gameover==false){
+        c.setPosition(x,y);
+    }*/
+    if(gameover==false){
+    if(e.keyCode==Keyboard.LEFT){
+        c.move(-10,0);
+    }
+    if(e.keyCode==Keyboard.RIGHT){
+        c.move(10,0);
+    }
+    if(e.keyCode==Keyboard.DOWN){
+        c.move(0,10);
+    }
+    if(e.keyCode==Keyboard.UP){
+        c.move(0,-10);
+    }
+    }
+    if(c.x<5){
+        c.x=5;
+    }
+    if(c.x>getWidth()){
+        c.x=getWidth()-5;
+    }
+    if(c.y<5){
+        c.y=5;
+    }
+    if(c.y>getHeight()){
+        c.y=getHeight()-5;
+    }
+}
